@@ -40,8 +40,6 @@
                     <span class="material-icons">arrow_forward</span>
                     </a>
                 </button>
-
-
             </div>
         </div>
     </section>
@@ -89,6 +87,25 @@
         </div>
     </section>
 
+    <!-- Modal HTML -->
+    <div id="loginModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+        <div class="w-96 h-96 rounded-lg shadow-lg p-6 relative" style="background: linear-gradient(to right, #010057, #000000);">
+        <span id="closeModal" class="absolute top-3 right-3 text-gray-100 cursor-pointer">&times;</span>
+            <h2 class="text-2xl font-bold mb-4 text-white">Login</h2>
+            <form id="loginForm">
+                <div class="mb-4">
+                    <label for="email" class="block text-gray-200">Email</label>
+                    <input type="email" id="email" class="w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                </div>
+                <div class="mb-6">
+                    <label for="password" class="block text-gray-200">Password</label>
+                    <input type="password" id="password" class="w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                </div>
+                <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600">Login</button>
+            </form>
+        </div>
+    </div>
+
     <?php
     // Footer section
     echo '
@@ -98,5 +115,65 @@
         </div>
     </footer>';
     ?>
+
+    <!-- JavaScript to handle modal functionality -->
+    <script>
+        // Get the modal
+        const modal = document.getElementById('loginModal');
+
+        // Get the button that opens the modal
+        const loginBtn = document.querySelector('nav a[href="login"]');
+
+        // Get the <span> element that closes the modal
+        const closeModal = document.getElementById('closeModal');
+
+        // When the user clicks the button, open the modal
+        loginBtn.addEventListener('click', function(event) {
+            event.preventDefault();
+            modal.classList.remove('hidden');
+        });
+
+        // When the user clicks on <span> (x), close the modal
+        closeModal.addEventListener('click', function() {
+            modal.classList.add('hidden');
+        });
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.addEventListener('click', function(event) {
+            if (event.target === modal) {
+                modal.classList.add('hidden');
+            }
+        });
+
+        // Handle form submission
+        const loginForm = document.getElementById('loginForm');
+        loginForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Get the email and password from the form
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // Use AJAX to send the login data to the server for validation
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', 'validate_login.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    if (xhr.responseText === 'success') {
+                        // Redirect to the next page on successful login
+                        window.location.href = 'dashboard.php';
+                    } else {
+                        // Show an error message
+                        alert('Invalid email or password');
+                    }
+                } else {
+                    alert('An error occurred while processing your request.');
+                }
+            };
+            xhr.send(`email=${email}&password=${password}`);
+        });
+    </script>
 </body>
 </html>
+

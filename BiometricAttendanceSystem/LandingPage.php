@@ -26,23 +26,24 @@
     </header>';
     ?>
 
-    <section id="home" class="min-h-screen bg-gray-200 text-center bg-cover" style="background-image: url(./icons/bg.jpg);">
-        <div class="flex justify-start items-start flex-col">
-            <div class="mt-56 ml-12 flex justify-start items-start flex-col">
-                <h1 class="text-5xl font-bold text-white ">Biometric Attendance</h1>
-                <h1 class="text-5xl font-bold text-white ">Using Fingerprint</h1>
-                <p class="text-lg text-white mt-8">Ease in monitoring attendance with our biometrics attendance system using IOT</p>
-                <p class="text-lg text-white">You can ensure an honest, reliable and worry less management of attendance system</p>
-                <button class="relative overflow-hidden text-white bg-[#305CDE] w-32 h-8 mt-8 ml-28 flex justify-center items-center transition-all duration-300 group">
-                    <span class="absolute inset-0 bg-gradient-to-r from-blue-500 to-green-400 translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-300"></span>
-                    <a href="Login.php" class="relative z-10 flex items-center gap-1">
-                      <span>Login</span>
+<section id="home" class="min-h-screen bg-gray-200 text-center bg-cover" style="background-image: url(./icons/bg.jpg);">
+    <div class="flex justify-start items-start flex-col">
+        <div class="mt-56 ml-12 flex justify-start items-start flex-col">
+            <h1 class="text-5xl font-bold text-white ">Biometric Attendance</h1>
+            <h1 class="text-5xl font-bold text-white ">Using Fingerprint</h1>
+            <p class="text-lg text-white mt-8">Ease in monitoring attendance with our biometrics attendance system using IOT</p>
+            <p class="text-lg text-white">You can ensure an honest, reliable and worry less management of attendance system</p>
+            <button id="openLoginModal" class="relative overflow-hidden text-white bg-[#305CDE] w-32 h-8 mt-8 ml-28 flex justify-center items-center transition-all duration-300 group">
+                <span class="absolute inset-0 bg-gradient-to-r from-blue-500 to-green-400 translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-300"></span>
+                <span class="relative z-10 flex items-center gap-1">
+                    <span>Login</span>
                     <span class="material-icons">arrow_forward</span>
-                    </a>
-                </button>
-            </div>
+                </span>
+            </button>
         </div>
-    </section>
+    </div>
+</section>
+
 
     <section id="services" class="min-h-screen bg-[#081525] flex items-center justify-center flex-col text-center ">
         <h1 class="mb-9 text-5xl font-bold text-white ">Our Services</h1>
@@ -90,21 +91,108 @@
     <!-- Modal HTML -->
     <div id="loginModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
         <div class="w-96 h-96 rounded-lg shadow-lg p-6 relative" style="background: linear-gradient(to right, #010057, #000000);">
-        <span id="closeModal" class="absolute top-3 right-3 text-gray-100 cursor-pointer">&times;</span>
+            <span id="closeModal" class="absolute top-3 right-3 text-gray-100 cursor-pointer">&times;</span>
             <h2 class="text-2xl font-bold mb-4 text-white">Login</h2>
-            <form id="loginForm">
-                <div class="mb-4">
-                    <label for="email" class="block text-gray-200">Email</label>
-                    <input type="email" id="email" class="w-full px-3 py-2 border border-gray-300 rounded-md" required>
-                </div>
-                <div class="mb-6">
-                    <label for="password" class="block text-gray-200">Password</label>
-                    <input type="password" id="password" class="w-full px-3 py-2 border border-gray-300 rounded-md" required>
-                </div>
-                <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600">Login</button>
-            </form>
+            
+            <!-- Handle errors and success messages -->
+            <?php
+            if (isset($_GET['error'])) {
+                if ($_GET['error'] == "invalidEmail") {
+                    echo '<div class="alert alert-danger">This E-mail is invalid!!</div>';
+                } elseif ($_GET['error'] == "sqlerror") {
+                    echo '<div class="alert alert-danger">There is a database error!!</div>';
+                } elseif ($_GET['error'] == "wrongpassword") {
+                    echo '<div class="alert alert-danger">Wrong password!!</div>';
+                } elseif ($_GET['error'] == "nouser") {
+                    echo '<div class="alert alert-danger">This E-mail does not exist!!</div>';
+                }
+            }
+            if (isset($_GET['reset']) && $_GET['reset'] == "success") {
+                echo '<div class="alert alert-success">Check your E-mail!</div>';
+            }
+            if (isset($_GET['account']) && $_GET['account'] == "activated") {
+                echo '<div class="alert alert-success">Please Login</div>';
+            }
+            if (isset($_GET['active']) && $_GET['active'] == "success") {
+                echo '<div class="alert alert-success">The activation link has been sent!</div>';
+            }
+            ?>
+
+<div class="form-container">
+                <!-- Reset Password Form -->
+                <form class="reset-form hidden" action="reset_pass.php" method="post" enctype="multipart/form-data">
+                    <div class="mb-4">
+                        <label for="reset-email" class="block text-gray-200">Email</label>
+                        <input type="email" name="email" id="reset-email" class="w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                    </div>
+                    <button type="submit" name="reset_pass" class="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600">Reset</button>
+                    <p class="message"><a href="#" id="toggle-login">LogIn</a></p>
+                </form>
+
+                <!-- Login Form -->
+                <form class="login-form" action="ac_login.php" method="post" enctype="multipart/form-data">
+                    <div class="mb-4">
+                        <label for="email" class="block text-gray-200">Email</label>
+                        <input type="email" name="email" id="email" class="w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                    </div>
+                    <div class="mb-6">
+                        <label for="password" class="block text-gray-200">Password</label>
+                        <input type="password" name="pwd" id="password" class="w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                    </div>
+                    <button type="submit" name="login" class="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600">Login</button>
+                    <p class="message">Forgot your Password? <a href="#" id="toggle-reset">Reset your password</a></p>
+                </form>
+            </div>
         </div>
     </div>
+
+    <!-- JavaScript to handle modal functionality -->
+    <script>
+// Get the modal
+const modal = document.getElementById('loginModal');
+
+// Get the button that opens the modal
+const loginBtn = document.getElementById('openLoginModal');
+
+// Get the <span> element that closes the modal
+const closeModal = document.getElementById('closeModal');
+
+// Toggle between login and reset forms
+const toggleLogin = document.getElementById('toggle-login');
+const toggleReset = document.getElementById('toggle-reset');
+const loginForm = document.querySelector('.login-form');
+const resetForm = document.querySelector('.reset-form');
+
+toggleLogin.addEventListener('click', function(event) {
+    event.preventDefault();
+    loginForm.classList.remove('hidden');
+    resetForm.classList.add('hidden');
+});
+
+toggleReset.addEventListener('click', function(event) {
+    event.preventDefault();
+    loginForm.classList.add('hidden');
+    resetForm.classList.remove('hidden');
+});
+
+// When the user clicks the button, open the modal
+loginBtn.addEventListener('click', function(event) {
+    event.preventDefault();
+    modal.classList.remove('hidden');
+});
+
+// When the user clicks on <span> (x), close the modal
+closeModal.addEventListener('click', function() {
+    modal.classList.add('hidden');
+});
+
+// When the user clicks anywhere outside of the modal, close it
+window.addEventListener('click', function(event) {
+    if (event.target === modal) {
+        modal.classList.add('hidden');
+    }
+});
+    </script>
 
     <?php
     // Footer section
@@ -115,65 +203,5 @@
         </div>
     </footer>';
     ?>
-
-    <!-- JavaScript to handle modal functionality -->
-    <script>
-        // Get the modal
-        const modal = document.getElementById('loginModal');
-
-        // Get the button that opens the modal
-        const loginBtn = document.querySelector('nav a[href="login"]');
-
-        // Get the <span> element that closes the modal
-        const closeModal = document.getElementById('closeModal');
-
-        // When the user clicks the button, open the modal
-        loginBtn.addEventListener('click', function(event) {
-            event.preventDefault();
-            modal.classList.remove('hidden');
-        });
-
-        // When the user clicks on <span> (x), close the modal
-        closeModal.addEventListener('click', function() {
-            modal.classList.add('hidden');
-        });
-
-        // When the user clicks anywhere outside of the modal, close it
-        window.addEventListener('click', function(event) {
-            if (event.target === modal) {
-                modal.classList.add('hidden');
-            }
-        });
-
-        // Handle form submission
-        const loginForm = document.getElementById('loginForm');
-        loginForm.addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            // Get the email and password from the form
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-
-            // Use AJAX to send the login data to the server for validation
-            const xhr = new XMLHttpRequest();
-            xhr.open('POST', 'validate_login.php', true);
-            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    if (xhr.responseText === 'success') {
-                        // Redirect to the next page on successful login
-                        window.location.href = 'dashboard.php';
-                    } else {
-                        // Show an error message
-                        alert('Invalid email or password');
-                    }
-                } else {
-                    alert('An error occurred while processing your request.');
-                }
-            };
-            xhr.send(`email=${email}&password=${password}`);
-        });
-    </script>
 </body>
 </html>
-

@@ -1,6 +1,6 @@
 <?php
 require_once 'vendor/autoload.php'; // Include Google API PHP Client library
-
+session_start();
 $client = new Google\Client();
 
 // Set the Google API credentials
@@ -29,10 +29,6 @@ $userinfo = $oauth2->userinfo->get();
 // Safely get the name or use email as fallback
 $name = isset($userinfo->name) && !empty($userinfo->name) ? $userinfo->name : $userinfo->email;
 
-// Generate activation token
-$activation_token = bin2hex(random_bytes(16));
-$activation_token_hash = hash("sha256", $activation_token);
-
 // Include the database connection file
 $mysqli = require __DIR__ . "/connectDB.php";
 
@@ -55,24 +51,16 @@ $stmt->execute();
 $result = $stmt->get_result();
 $user = $result->fetch_assoc();
 
-// If user doesn't exist, insert a new record
+// If user doesn't exist, display an error message or redirect
 if (!$user) {
-    $sql = "INSERT INTO admin (admin_email, admin_name, google_id, account_activation_hash) VALUES (?, ?, ?, ?)";
-    $stmt = $mysqli->prepare($sql);
-    if (!$stmt) {
-        die("Failed to prepare SQL statement for insertion: " . $mysqli->error);
-    }
-    $stmt->bind_param("ssss", $userinfo->email, $name, $userinfo->id, $activation_token_hash);
-    if (!$stmt->execute()) {
-        die("Failed to execute SQL insertion: " . $stmt->error);
-    }
+    header("Location: LandingPage.php?error=nouser");
+    exit();
 
-    // Retrieve the newly inserted user data (in case you want to store user ID or other details)
-    $user_id = $mysqli->insert_id; // Get the last inserted ID
 } else {
     // If the user exists, retrieve the user ID
     $user_id = $user['id'];
 }
+
 
 // Set session variables
 session_start();

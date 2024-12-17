@@ -8,6 +8,11 @@ session_start();
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="css/bootstrap.css"/>
     <link rel="stylesheet" type="text/css" href="css/header.css"/>
+    <style>
+        .topnav-right {
+            float: right;
+        }
+    </style>
 </head>
 <body>
 <header>
@@ -54,19 +59,31 @@ if (isset($_GET['login'])) {
 }
 ?>
 <div class="topnav" id="myTopnav">
+    <a>
+        <img src="css/logo.png" alt="Logo" style="width: 50px; height: 50px; border-radius: 50%;">
+    </a>
+    <a><strong>AttenTech</strong></a>
     <a href="index.php">Users</a>
     <a href="ManageUsers.php">Manage Users</a>
     <a href="UsersLog.php">Users Log</a>
     <a href="devices.php">Devices</a>
-    <?php  
-        if (isset($_SESSION['Admin-name'])) {
-            echo '<a href="#" data-toggle="modal" data-target="#admin-account">'.$_SESSION['Admin-name'].'</a>';
-            echo '<a href="LandingPage.php">Log Out</a>';
-        }
-        else{
-            echo '<a href="login.php">Log In</a>';
-        }
-    ?>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div class="topnav-right">
+        <?php  
+            if (isset($_SESSION['Admin-name'])) {
+                echo '<a href="#" data-toggle="modal" data-target="#admin-account">'.$_SESSION['Admin-name'].'</a>';
+                echo '<a href="LandingPage.php">Log Out</a>';
+            }
+            else{
+                echo '<a href="login.php">Log In</a>';
+            }
+        ?>
     <a href="javascript:void(0);" class="icon" onclick="navFunction()">
         <i class="fa fa-bars"></i>
     </a>
@@ -95,31 +112,69 @@ if (isset($_GET['login'])) {
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form action="ac_update.php" method="POST" enctype="multipart/form-data">
-          <div class="modal-body">
-              <label for="User-mail"><b>Admin Name:</b></label>
-              <input type="text" name="up_name" placeholder="Enter your Name..." value="<?php echo $_SESSION['Admin-name']; ?>" required/><br>
-              <label for="User-mail"><b>Admin E-mail:</b></label>
-              <input type="email" name="up_email" placeholder="Enter your E-mail..." value="<?php echo $_SESSION['Admin-email']; ?>" required/><br>
-              <label for="User-psw"><b>Password</b></label>
-              <input type="password" name="up_pwd" placeholder="Enter your Password..." required/><br>
-          </div>
-          <div class="modal-footer">
-            <button type="submit" name="update" class="btn btn-success">Save changes</button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          </div>
-      </form>
+    <form action="ac_update.php" method="POST" enctype="multipart/form-data">
+        <div class="modal-body">
+          <label for="User-mail"><b>Admin Name:</b></label>
+          <input type="text" name="up_name" placeholder="Enter your Name..." value="<?php echo $_SESSION['Admin-name']; ?>" required/><br>
+          <label for="User-mail"><b>Admin E-mail:</b></label>
+          <input type="email" name="up_email" placeholder="Enter your E-mail..." value="<?php echo $_SESSION['Admin-email']; ?>" required/><br>
+          <label for="User-psw"><b>Current Password:</b></label>
+          <input type="password" name="up_pwd" id="up_pwd" placeholder="Enter your Current Password..." required/><br>
+          <label for="new-psw"><b>New Password:</b></label>
+          <input type="password" name="new_pwd" id="new_pwd" placeholder="Enter your New Password..." required disabled/><br>
+          <label for="retype-psw"><b>Confirm New Password:</b></label>
+          <input type="password" name="retype_pwd" id="retype_pwd" placeholder="Re-type your New Password..." required disabled/><br>
+          <script>
+            document.getElementById('up_pwd').addEventListener('input', function() {
+                var currentPwd = document.getElementById('up_pwd').value;
+                var newPwd = document.getElementById('new_pwd');
+                var retypePwd = document.getElementById('retype_pwd');
+                if (currentPwd) {
+                  newPwd.disabled = false;
+                  retypePwd.disabled = false;
+                } else {
+                  newPwd.disabled = true;
+                  retypePwd.disabled = true;
+                }
+            });
+
+            document.querySelector('form').addEventListener('submit', function(e) {
+                var currentPwd = document.getElementById('up_pwd').value;
+                var newPwd = document.getElementById('new_pwd').value;
+                var retypePwd = document.getElementById('retype_pwd').value;
+                if (!currentPwd) {
+                  e.preventDefault();
+                  alert('Current Password is required to set a new password!');
+                } else if (newPwd !== retypePwd) {
+                  e.preventDefault();
+                  alert('New Password and Re-type New Password do not match!');
+                }
+            });
+
+            document.querySelector('.modal .close').addEventListener('click', function() {
+                document.querySelector('form').reset();
+                document.getElementById('new_pwd').disabled = true;
+                document.getElementById('retype_pwd').disabled = true;
+            });
+
+            $('#admin-account').on('hidden.bs.modal', function () {
+                document.querySelector('form').reset();
+                document.getElementById('new_pwd').disabled = true;
+                document.getElementById('retype_pwd').disabled = true;
+            });
+          </script>
+        </div>
+        <div class="modal-footer">
+        <button type="submit" name="update" class="btn btn-success">Save changes</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+    </form>
     </div>
   </div>
 </div>
 <br>
 <br>
 <br>
-<div class="header">
-    <div class="logo">
-        <a href="index.php">Biometric Attendance System Using IOT</a>
-    </div>
 </div>
 </body>
 </html>
- 

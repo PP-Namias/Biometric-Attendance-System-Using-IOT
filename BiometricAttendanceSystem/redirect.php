@@ -55,6 +55,7 @@ $user = $result->fetch_assoc();
 if (!$user) {
     header("Location: LandingPage.php?error=nouser");
     exit();
+
 } else {
     // If the user exists, retrieve the user ID
     $user_id = $user['id'];
@@ -62,7 +63,7 @@ if (!$user) {
 
 
 // Set session variables
-
+session_start();
 $_SESSION['user_id'] = $user_id;
 $_SESSION['email'] = $userinfo->email;
 $_SESSION['name'] = $name;

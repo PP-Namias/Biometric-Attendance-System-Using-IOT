@@ -41,11 +41,17 @@ header, main {
   background-color: #333;
 }
 
+#navbar {
+  display: flex;
+  align-items: center; /* Align items vertically */
+  background-color: #444;
+}
+
 #navbar a {
+  display: flex;
+  align-items: center; /* Center text vertically */
   float: left;
-  display: block;
-  color: white ;
-  text-align: center;
+  color: white;
   padding: 14px 16px;
   text-decoration: none;
   font-size: 17px;
@@ -53,7 +59,7 @@ header, main {
 
 #navbar a:hover {
   background-color: #555;
-  color: white ;
+  color: white;
 }
 
 .content {
@@ -63,16 +69,27 @@ header, main {
 .topnav {
   overflow: hidden;
   background-color: #444;
+  margin: 100;
 }
 
 .topnav a {
   float: left;
-  display: block;
+  display: flex;
+  align-items: center; /* Center text vertically */
   color: white;
   text-align: center;
   padding: 14px 16px;
   text-decoration: none !important;
-  font-size: 17px;
+  font-size: 25px;
+}
+
+
+.topnav-right{
+ margin-right: 200px;
+}
+
+.topnav a:first-child {
+  margin-left: 150px;
 }
 
 .topnav a:hover {
@@ -137,7 +154,7 @@ span.psw {
 }
 
 .modal-body {
-  background-color: #6a6a6a !important;
+  background-color: blue !important;
 }
 
 .modal-body input[type="text"],
@@ -209,6 +226,7 @@ span.psw {
 #navbar {
   overflow: hidden;
   background-color: #010048;
+  text-align: center;
 }
 
 #navbar a:hover {
@@ -219,9 +237,11 @@ span.psw {
 .topnav {
   overflow: hidden;
   background-color: #010048;
+  text-align: center;
 }
 
 .topnav a:hover {
   background-color: #333;
   color: #fff;
 }
+

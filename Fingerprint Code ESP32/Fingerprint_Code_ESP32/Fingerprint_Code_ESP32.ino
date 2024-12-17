@@ -1,6 +1,7 @@
+
 #include <WiFi.h>                   // For ESP32 WiFi functionality
 #include <HTTPClient.h>             // For HTTP requests
-#include <SimpleTimer.h>            // For timer functions (https://github.com/jfturcot/SimpleTimer)
+#include <Simpletimer.h>            // For timer functions (https://github.com/jfturcot/SimpleTimer)
 // OLED Display
 #include <SPI.h>
 #include <Wire.h>
@@ -22,11 +23,11 @@
 #define OLED_RESET 0 
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
-SoftwareSerial mySerial(Finger_Rx, Finger_Tx);
-Adafruit_Fingerprint finger = Adafruit_Fingerprint(&mySerial);
+HardwareSerial mySerial(1);  // 1 refers to UART1, you can change it to 2 if needed
+mySerial.begin(9600, SERIAL_8N1, Finger_Rx, Finger_Tx);  // Initialize with correct baudrate and pin numbers
 
-const char *ssid = "SKYFiber_5GHz_MwS2";
-const char *password = "GgKtK5j6";
+const char *ssid = "SKY GUEST";
+const char *password = "Qwert12345.*";
 const char* device_token = "Device Token"; // Obtain this from your server or IoT platform
 
 String postData;

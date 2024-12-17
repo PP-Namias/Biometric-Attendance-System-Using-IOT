@@ -90,3 +90,8 @@ section {
     font-size: 18px !important;
   }
 }
+
+.table-container {
+  width: 75%; /* Reduce the width to 75% */
+  margin: 30px auto; /* Center the table */
+}

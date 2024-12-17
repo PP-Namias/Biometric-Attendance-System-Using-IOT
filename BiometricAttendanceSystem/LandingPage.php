@@ -1,3 +1,20 @@
+<?php
+require_once 'vendor/autoload.php'; 
+
+$client = new Google\Client();
+
+// Set the Google API credentials
+$client->setClientId("873466661966-o0fq28gkb65c6letke5lurjccjoqie96.apps.googleusercontent.com"); // Replace with your Google Client ID
+$client->setClientSecret("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"); // Replace with your Google Client Secret
+$client->setRedirectUri("http://localhost/Biometric-Attendance-System-Using-IOT/BiometricAttendanceSystem/redirect.php"); // Replace with your Redirect URI
+
+$client->addScope("email");
+$client->addScope("profile");
+
+$Oath_url = $client->createAuthUrl();
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,6 +46,7 @@
         }
     </style>
 </head>
+
 <body class="bg-gradient-to-br from-gray-900 to-black text-white min-h-screen flex flex-col">
     <?php
     require_once 'vendor/autoload.php'; 
@@ -75,6 +93,7 @@
             </button>
         </div>
     </div>
+
 
     <main class="flex-grow container mx-auto px-4 pt-32 pb-16">
         <section id="home" class="py-20">
@@ -164,6 +183,7 @@
                 </h1>
                 <h5 class="text-0.5x0.75 mb-4 text-white"> Login your account </h5>
             </div>
+
             <!-- Handle errors and success messages -->
             <?php
             if (isset($_GET['error'])) {
@@ -188,7 +208,7 @@
             }
             ?>
 
-<div class="form-container">
+            <div class="form-container">
                 <!-- Reset Password Form -->
                 <form class="reset-form hidden" action="reset_pass.php" method="post" enctype="multipart/form-data">
                     <div class="mb-4">
@@ -199,6 +219,7 @@
                     <br>
                     <br>
                     <p class="message text-center"><a href="#" id="toggle-login">LogIn</a></p>
+
                 </form>
 
                 <!-- Login Form -->
@@ -243,6 +264,70 @@
             </form>
         </div>
     </div>
+
+
+    <script>
+        // Get the Google Sign-In button
+        const googleSignInBtn = document.getElementById('googleSignIn');
+
+        // When the user clicks the button, redirect to Google Sign-In
+        googleSignInBtn.addEventListener('click', function(event) {
+            event.preventDefault();
+            window.location.href = "<?php echo $Oath_url; ?>"; // Replace with your Google Sign-In URL
+        });
+    </script>
+    <!-- JavaScript to handle modal functionality -->
+    <script>
+        // Get the modal
+        const modal = document.getElementById('loginModal');
+
+        // Get the button that opens the modal
+        const loginBtn = document.getElementById('openLoginModal');
+
+        // Get the <span> element that closes the modal
+        const closeModal = document.getElementById('closeModal');
+
+        // Toggle between login and reset forms
+        const toggleLogin = document.getElementById('toggle-login');
+        const toggleReset = document.getElementById('toggle-reset');
+        const loginForm = document.querySelector('.login-form');
+        const resetForm = document.querySelector('.reset-form');
+
+        toggleLogin.addEventListener('click', function(event) {
+            event.preventDefault();
+            loginForm.classList.remove('hidden');
+            resetForm.classList.add('hidden');
+        });
+
+        toggleReset.addEventListener('click', function(event) {
+            event.preventDefault();
+            loginForm.classList.add('hidden');
+            resetForm.classList.remove('hidden');
+        });
+
+        // When the user clicks the button, open the modal
+        loginBtn.addEventListener('click', function(event) {
+            event.preventDefault();
+            modal.classList.remove('hidden');
+        });
+
+        // Check if there is an error in the URL and open the modal
+        if (window.location.search.includes('error')) {
+            modal.classList.remove('hidden');
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        closeModal.addEventListener('click', function() {
+            modal.classList.add('hidden');
+        });
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.addEventListener('click', function(event) {
+            if (event.target === modal) {
+                modal.classList.add('hidden');
+            }
+        });
+    </script>
 
     <footer class="bg-gray-900 py-6">
         <div class="container mx-auto text-center">
@@ -349,4 +434,4 @@
         ?>
     </script>
 </body>
-</html> 
+</html>

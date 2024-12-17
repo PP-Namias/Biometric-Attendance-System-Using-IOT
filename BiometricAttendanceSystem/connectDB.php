@@ -10,4 +10,6 @@
 	if ($conn->connect_error) {
         die("Database Connection failed: " . $conn->connect_error);
     }
+
+    return $conn;
 ?>

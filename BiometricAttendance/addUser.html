@@ -1,0 +1,64 @@
+<script>
+    function registerFingerprint() {
+        var username = document.getElementById("username").value;
+
+        if (username !== "") {
+            // Send username to ESP32 to trigger fingerprint capture
+            fetch("http://192.168.1.15/startRegistration", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ "username": username })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.message);
+                if (data.status === "success") {
+                    document.getElementById("message").innerText = "Fingerprint captured. Saving to database...";
+                    
+                    // Send the captured data to the server
+                    saveToDatabase(username, data.fingerprint);
+                } else {
+                    document.getElementById("message").innerText = "Fingerprint capture failed. Try again.";
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById("message").innerText = "Failed to communicate with the ESP32.";
+            });
+        } else {
+            document.getElementById("message").innerText = "Please enter a username.";
+        }
+    }
+
+    function saveToDatabase(username, fingerprint) {
+        // Send username and fingerprint to PHP script
+        fetch("saveUser.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ "username": username, "fingerprint": fingerprint })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === "success") {
+                document.getElementById("message").innerText = "User saved successfully!";
+            } else {
+                document.getElementById("message").innerText = "Failed to save user.";
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById("message").innerText = "Error saving to database.";
+        });
+    }
+</script>
+
+<form onsubmit="event.preventDefault(); registerFingerprint();">
+    <label for="username">Enter Username: </label>
+    <input type="text" id="username" required><br><br>
+    <button type="submit">Register Fingerprint</button>
+</form>
+<p id="message"></p>

@@ -2,7 +2,7 @@
 $token = $_GET['token'] ?? null; // Ensure $token is set
 
 if (!$token) {
-    die("Invalid token");
+    die("Invalid token.");
 }
 
 $token_hash = hash("sha256", $token);
@@ -23,11 +23,11 @@ $result = $stmt->get_result();
 $user = $result->fetch_assoc();
 
 if ($user === null) {
-    die("Invalid token");
+    die("Invalid token.");
 }
 
 if (strtotime($user['reset_token_expires_at']) < time()) {
-    die("Token has expired");
+    die("Token has expired.");
 }
 ?>
 <!DOCTYPE html>
@@ -67,4 +67,3 @@ if (strtotime($user['reset_token_expires_at']) < time()) {
 </main>
 </body>
 </html>
- 

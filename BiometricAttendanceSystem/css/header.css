@@ -154,7 +154,7 @@ span.psw {
 }
 
 .modal-body {
-  background-color: blue !important;
+  background-color:gray !important;
 }
 
 .modal-body input[type="text"],

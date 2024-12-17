@@ -95,3 +95,7 @@ section {
   width: 75%; /* Reduce the width to 75% */
   margin: 30px auto; /* Center the table */
 }
+
+body {
+  color: violet;
+}

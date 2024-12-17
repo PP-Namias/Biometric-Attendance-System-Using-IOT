@@ -1,5 +1,5 @@
 <?php
-require_once 'vendor/autoload.php'; // Include Google API PHP Client library
+require_once 'vendor/autoload.php'; 
 
 $client = new Google\Client();
 

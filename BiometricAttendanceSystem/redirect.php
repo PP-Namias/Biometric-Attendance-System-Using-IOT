@@ -1,6 +1,6 @@
 <?php
 require_once 'vendor/autoload.php'; // Include Google API PHP Client library
-
+session_start();
 $client = new Google\Client();
 
 // Set the Google API credentials
@@ -62,7 +62,7 @@ if (!$user) {
 
 
 // Set session variables
-session_start();
+
 $_SESSION['user_id'] = $user_id;
 $_SESSION['email'] = $userinfo->email;
 $_SESSION['name'] = $name;

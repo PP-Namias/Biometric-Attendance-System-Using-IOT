@@ -237,7 +237,7 @@ $Oath_url = $client->createAuthUrl();
                     <br>
                     <p class="text-white text-xs text-center">or continue with</p>
                     <br>
-                    <button type="button" class="w-full bg-red-500 text-white py-2 rounded-md hover:bg-red-600 flex items-center justify-center">
+                    <button id="googleSignIn" type="button" class="w-full bg-red-500 text-white py-2 rounded-md hover:bg-red-600 flex items-center justify-center">
                         <i class="fab fa-google mr-2"></i> Sign in with Google
                     </button>
                 <style>
@@ -266,16 +266,7 @@ $Oath_url = $client->createAuthUrl();
     </div>
 
 
-    <script>
-        // Get the Google Sign-In button
-        const googleSignInBtn = document.getElementById('googleSignIn');
-
-        // When the user clicks the button, redirect to Google Sign-In
-        googleSignInBtn.addEventListener('click', function(event) {
-            event.preventDefault();
-            window.location.href = "<?php echo $Oath_url; ?>"; // Replace with your Google Sign-In URL
-        });
-    </script>
+   
     <!-- JavaScript to handle modal functionality -->
     <script>
         // Get the modal
@@ -290,9 +281,7 @@ $Oath_url = $client->createAuthUrl();
         // Toggle between login and reset forms
         const toggleLogin = document.getElementById('toggle-login');
         const toggleReset = document.getElementById('toggle-reset');
-        const loginForm = document.querySelector('.login-form');
-        const resetForm = document.querySelector('.reset-form');
-
+       
         toggleLogin.addEventListener('click', function(event) {
             event.preventDefault();
             loginForm.classList.remove('hidden');
@@ -353,7 +342,6 @@ $Oath_url = $client->createAuthUrl();
         const loginModal = document.getElementById('loginModal');
         const openLoginModal = document.getElementById('openLoginModal');
         const openLoginModalMobile = document.getElementById('openLoginModalMobile');
-        const closeModal = document.getElementById('closeModal');
         const loginForm = document.querySelector('.login-form');
         const resetForm = document.querySelector('.reset-form');
         const toggleResetPassword = document.getElementById('toggle-reset');
@@ -401,13 +389,11 @@ $Oath_url = $client->createAuthUrl();
 
         // Google Sign-In functionality
         const googleSignInBtn = document.getElementById('googleSignIn');
-
+        // Google Sign-In functionality
         googleSignInBtn.addEventListener('click', (event) => {
             event.preventDefault();
             window.location.href = "<?php echo $Oath_url; ?>";
         });
-
-        // Handle errors and success messages
         <?php
         if (isset($_GET['error'])) {
             echo "alert('";
@@ -435,3 +421,10 @@ $Oath_url = $client->createAuthUrl();
     </script>
 </body>
 </html>
+// Google Sign-In functionality
+const googleSignInBtn = document.querySelector('.google-sign-in-btn');
+
+googleSignInBtn.addEventListener('click', function(event) {
+    event.preventDefault();
+    window.location.href = "<?php echo $Oath_url; ?>";
+});
